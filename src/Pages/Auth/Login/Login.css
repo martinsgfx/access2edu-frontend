@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* Nav Bar at the top */
+.headbar {
+  display: flex;
+  padding: 1rem;
+  align-items: center;
+  background-color: rgba(243, 239, 248, 0.5);
+}
+
+/* Intro text */
+.intro {
+  display: grid;
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+  gap: 1rem;
+}
+
+/* Welcome back and icon */
+.headingText {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Googel and Apple Sign In */
+
+.google,
+.apple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  padding: 1rem 1.5rem;
+  border: 1px solid #dcdcdc;
+  gap: 1rem;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Email and Password Styling */
+
+.email,
+.password {
+  border: 1px solid #7c7c7c;
+  border-radius: 10px;
+}
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.eyeIcon {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  color: #777;
+  font-size: 16px;
+}
+
+.pwordSpace {
+  width: 100%;
+}
+
+.access2eduLogo {
+  display: flex;
+  justify-self: center;
+}
+
+
+/* Web Login Page */
+
+.loginContainer {
+  display: flex;  
+  /* gap: 2rem; */
+}
+
+.leftLogin {
+  width: 50%;
+}
+
+.rightLogin {
+  width: 50%;
+  background-image: url("login-image.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; 
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+
+
+
+/* General Login Media Query */
+
+@media (max-width: 992px) {
+  .webView {
+    display: none;
+  }
+}
+
+@media (min-width: 992px) {
+  .mobileView {
+    display: none;
+  }
+
+  .loginContainer {
+    display: flex;    
+  }
+}
+
