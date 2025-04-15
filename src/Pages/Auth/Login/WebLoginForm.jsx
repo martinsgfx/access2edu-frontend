@@ -3,6 +3,7 @@ import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import "./Login.css";
+import SocialMediaWebSignIn from "./SocialMediaWebSignIn";
 
 function WebLoginForm() {
   const [formData, setFormData] = useState({
@@ -149,26 +150,7 @@ function WebLoginForm() {
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
 
-          <div className="flex justify-center gap-10 pt-4 pb-10">
-
-            {/* Microsoft Sign-in Button */}
-            <button >
-              <img src="src/assets/logos_microsoft-icon.svg" alt="Microsoft Icon" className="w-10 h-10" />
-            </button>
-
-
-            {/* Google Sign-in Button */}
-            <button >
-              <img src="src/assets/devicon_google.svg" alt="Google Icon" className="w-10 h-10" />
-            </button>
-
-            {/* Apple Sign-in Button */}
-            <button >
-              <img src="src/assets/ic_outline-apple.svg" alt="Apple Icon" className="w-10 h-10" />
-            </button>
-
-            
-          </div>
+          <SocialMediaWebSignIn />
         </div>
 
         <p className="p-4 pl-0 flex gap-1 justify-center">

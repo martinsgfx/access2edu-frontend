@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import "./Signup.css";
@@ -22,6 +23,7 @@ function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formMessage, setFormMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -70,16 +72,24 @@ function SignupForm() {
       setFormMessage( () => {
         return (
           <div >
-            <p className="text-red-400 text-center font-medium" >Please fill in all fields</p>
+            <p className="text-red-400 bg-red-200 p-4 rounded-lg text-center font-medium" >Please fill in all fields</p>
           </div>
         )
       });
   
-    } else if (emailError || error || confirmError) {
-      setFormMessage("Please fix the errors before submitting.");
-    } else {
-      setFormMessage("Form submitted successfully!");
+    }  else {
+      setFormMessage(() => {
+        return (
+          <div>
+            <p className="text-green-400 text-center bg-green-200 p-4 rounded-lg font-medium">
+            "Form submitted successfully!"
+            </p>
+          </div>
+        );
+      });
+      navigate("/signup-confirmation");
     }
+    
   };
 
   return (
@@ -192,13 +202,14 @@ function SignupForm() {
       </div>
 
       {/* Button */}
+      {formMessage && <p className="mt-2 text-sm text-red-500">{formMessage}</p>}
       <button
-        className="bg-[#BCA0D2] mt-10 p-4 rounded-lg hover:bg-[#785491] text-[#000000] hover:text-white"
+        className=" mt-5 p-4 rounded-lg bg-[#785491] text-white"
         type="submit"        
       >
         Submit
       </button>
-      {formMessage && <p className="mt-2 text-sm text-red-500">{formMessage}</p>}
+      
 
 
       <p className="p-4 pl-0 flex justify-center">

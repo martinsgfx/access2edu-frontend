@@ -1,98 +1,118 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import "./Signup.css";
 
 function WebSignupForm() {
-    const [formData, setFormData] = useState({
-        fName: "",
-        lName: "",
-        email: "",
-        gName: "",
-        password: "",
-        confirmPassword: "",
-    }); // Form Data
-    
-    const [email, setEmail] = useState(""); // Email Value
-      const [emailError, setEmailError] = useState(""); // Email Error
-      const [password, setPassword] = useState(""); // Password Value
-      const [passwordError, setPasswordError] = useState(""); // Password Error
-      const [confirmPassword, setConfirmPassword] = useState(""); // Confirm Password Value
-      const [confirmPasswordError, setConfirmPasswordError] = useState(""); // Confirm Password Error
-      const [showPassword, setShowPassword] = useState(false);
-      const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-      const [formMessage, setFormMessage] = useState("");
-    
-      const handleChange = (e) => {
-        setFormData((prev) => ({
-          ...prev,
-          [e.target.name]: e.target.value,
-        }));
-      };
-    
-      const validateEmail = (event) => {
-        const value = event.target.value;
-        setEmail(value);
-        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-        if (!isValid) {
-          setEmailError("Please enter a valid email address");
-        } else {
-          setEmailError("");
-        }
-      };
-    
-      const handlePasswordChange = (event) => {
-        const value = event.target.value;
-        const isValid = value.length >= 6 && /\d/.test(value);
-        if (!isValid) {
-          setPasswordError(
-            "Password must be at least 6 characters including a number"
-          );
-        } else {
-          setPasswordError("");
-        }
-        setPassword(value);
-      };
-    
-      const handleConfirmPasswordChange = (event) => {
-        const value = event.target.value;
-        if (value !== password) {
-          setConfirmPasswordError("Passwords do not match");
-        } else {
-          setConfirmPasswordError("");
-        }
-        setConfirmPassword(value);
-      };
-    
-      const handleSubmit = (event) => {
-        event.preventDefault();
-        if (!formData.fName || !formData.lName || !email || !formData.gName ||  !password || !confirmPassword) {
-          setFormMessage( () => {
-            return (
-              <div >
-                <p className="text-red-400 text-center font-medium" >Please fill in all fields</p>
-              </div>
-            )
-          });
-      
-        } else if (emailError || error || confirmError) {
-          setFormMessage("Please fix the errors before submitting.");
-        } else {
-          setFormMessage("Form submitted successfully!");
-        }
-      };
+  const [formData, setFormData] = useState({
+    fName: "",
+    lName: "",
+    email: "",
+    gName: "",
+    password: "",
+    confirmPassword: "",
+  }); // Form Data
+
+  const [email, setEmail] = useState(""); // Email Value
+  const [emailError, setEmailError] = useState(""); // Email Error
+  const [password, setPassword] = useState(""); // Password Value
+  const [passwordError, setPasswordError] = useState(""); // Password Error
+  const [confirmPassword, setConfirmPassword] = useState(""); // Confirm Password Value
+  const [confirmPasswordError, setConfirmPasswordError] = useState(""); // Confirm Password Error
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [formMessage, setFormMessage] = useState("");
+  const navigate = useNavigate();
+
+
+  // Handle Data Change
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
 
 
+    // Validate Email 
+  const validateEmail = (event) => {
+    const value = event.target.value;
+    setEmail(value);
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    if (!isValid) {
+      setEmailError("Please enter a valid email address");
+    } else {
+      setEmailError("");
+    }
+  };
 
 
+  //Handle Password Verification and Change
+
+  const handlePasswordChange = (event) => {
+    const value = event.target.value;
+    const isValid = value.length >= 6 && /\d/.test(value);
+    if (!isValid) {
+      setPasswordError(
+        "Password must be at least 6 characters including a number"
+      );
+    } else {
+      setPasswordError("");
+    }
+    setPassword(value);
+  };
 
 
+  // Handle Password Confiramation
+  const handleConfirmPasswordChange = (event) => {
+    const value = event.target.value;
+    if (value !== password) {
+      setConfirmPasswordError("Passwords do not match");
+    } else {
+      setConfirmPasswordError("");
+    }
+    setConfirmPassword(value);
+  };
 
 
+  
+  //Handle Submit Forn 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (
+      !formData.fName ||
+      !formData.lName ||
+      !email ||
+      !formData.gName ||
+      !password ||
+      !confirmPassword
+    ) {
+      setFormMessage(() => {
+        return (
+          <div>
+            <p className="text-red-400 text-center bg-red-200 p-4 rounded-lg font-medium">
+              Please fill in all fields
+            </p>
+          </div>
+        );
+      });
+    } else {
+      setFormMessage(() => {
+        return (
+          <div>
+            <p className="text-green-400 text-center bg-green-200 p-4 rounded-lg font-medium">
+            "Form submitted successfully!"
+            </p>
+          </div>
+        );
+      });
 
-
+      navigate("/signup-confirmation");
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} action="" className="grid gap-5 p-6">
@@ -204,15 +224,15 @@ function WebSignupForm() {
       </div>
 
       {/* Button */}
+      {formMessage && (
+        <p className="mt-2 text-sm text-red-500">{formMessage}</p>
+      )}
       <button
-        className="bg-[#BCA0D2] mt-10 p-4 rounded-lg hover:bg-[#785491] text-[#000000] hover:text-white"
+        className="bg-[#BCA0D2] mt-5 p-4 rounded-lg hover:bg-[#785491] text-[#000000] hover:text-white"
         type="submit"
       >
         Submit
       </button>
-      {formMessage && (
-        <p className="mt-2 text-sm text-red-500">{formMessage}</p>
-      )}
 
       <p className="p-4 pl-0 flex justify-center">
         Already have an account{" "}

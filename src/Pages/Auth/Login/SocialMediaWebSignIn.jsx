@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css";
 
-function SocialMediaSignIn() {
+function SocialMediaWebSignIn() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -81,10 +81,10 @@ function SocialMediaSignIn() {
     if (window.google?.accounts.id) {
       // Avoid using prompt (FedCM issue), use One Tap or button
       // Fallback if identity-credentials is not supported
-      setError('Google One Tap login requires a supported browser context.');
+      setError("Google One Tap login requires a supported browser context.");
       setLoading(false);
     } else {
-      setError('Google Sign-In failed to load');
+      setError("Google Sign-In failed to load");
       setLoading(false);
     }
   };
@@ -215,46 +215,36 @@ function SocialMediaSignIn() {
         </div>
       )}
 
-      {/* Google Sign-in Button */}
-      <button
-        className="google"
-        onClick={handleGoogleSignIn}
-        disabled={loading}
-      >
-        <img src="src/assets/devicon_google.svg" alt="Google Icon" />
-        <p className="font-semibold">Sign in with Google</p>
-      </button>
+      <div className="flex justify-center gap-10 pt-4 pb-10">
+        {/* Microsoft Sign-in Button */}
+        <button onClick={handleMicrosoftSignIn} disabled={loading}>
+          <img
+            src="src/assets/logos_microsoft-icon.svg"
+            alt="Microsoft Icon"
+            className="w-10 h-10"
+          />
+        </button>
 
-      {/* Apple Sign-in Button */}
-      <button
-        className="apple"
-        onClick={handleAppleSignIn}
-        disabled={loading}
-      >
-        <img src="src\assets\ic_outline-apple.svg" alt="Apple Icon" />
-        <p className="font-semibold">Sign in with Apple</p>
-      </button>
+        {/* Google Sign-in Button */}
+        <button onClick={handleGoogleSignIn} disabled={loading}>
+          <img
+            src="src/assets/devicon_google.svg"
+            alt="Google Icon"
+            className="w-10 h-10"
+          />
+        </button>
 
-      {/* Microsoft Sign-in Button */}
-      <button className="apple"  onClick={handleMicrosoftSignIn} disabled={loading}>
-        <img src="src\assets\logos_microsoft-icon.svg" alt="Microsoft Icon" />
-        <p className="font-semibold">Sign in with Microsoft</p>
-      </button>
-
-      {loading && (
-        <div className="flex justify-center mt-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-        </div>
-      )}
-
-      {/* Divider with text */}
-      <div className="flex items-center w-full my-2 mt-8">
-        <div className="flex-grow border-t border-gray-300"></div>
-        <span className="px-4 text-gray-500">Or Sign in with</span>
-        <div className="flex-grow border-t border-gray-300"></div>
+        {/* Apple Sign-in Button */}
+        <button onClick={handleAppleSignIn} disabled={loading}>
+          <img
+            src="src/assets/ic_outline-apple.svg"
+            alt="Apple Icon"
+            className="w-10 h-10"
+          />
+        </button>
       </div>
     </div>
   );
 }
 
-export default SocialMediaSignIn;
+export default SocialMediaWebSignIn;

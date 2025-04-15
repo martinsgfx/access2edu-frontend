@@ -14,6 +14,8 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [keepMeSignedIn, setKeepMeSignedIn] = useState(false);
 
+  
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -54,7 +56,7 @@ function LoginForm() {
       }
       console.log("Form submitted! Auth token saved.");
     }
-  };
+  };  
 
   return (
     <div className="pb-10">
@@ -131,7 +133,7 @@ function LoginForm() {
 
         {/* Button */}
         <button
-          className="bg-[#BCA0D2] p-4 rounded-lg hover:bg-[#785491] text-[#000000] hover:text-white"
+          className="p-4 rounded-lg bg-[#785491] text-white"
           type="submit"
           disabled={isSubmitting}
         >
