@@ -8,7 +8,7 @@ import Sidebar from "../../components/Sidebar";
 function Dashboard() {
   return (
     <div className="flex h-screen ">
-      <Sidebar />
+      <Sidebar /> 
       <main className="flex-1 bg-[#fffbeb] ">
         <DashboardHeaderWeb />
         <Outlet />
