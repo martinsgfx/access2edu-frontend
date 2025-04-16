@@ -12,12 +12,21 @@ import Assessment from './Pages/Onboarding/Assessment';
 import SignupConfirmation from './Pages/Auth/Signup/SignupConfirmation';
 import SelectClasses from './Pages/Onboarding/SelectClasses';
 import ExamPage from './Pages/Onboarding/ExamPage';
+import Dashboard from './Pages/Dashboard/Dashboard';
+import DashboardPage from './Pages/Dashboard/DashboardPage';
+import SubjectsPage from './Pages/Dashboard/SubjectsPage';
+import TimeTable from './Pages/Dashboard/TimeTable';
+import VideoRecord from './Pages/Dashboard/VideoRecord';
+import Result from './Pages/Dashboard/Result';
+import Fees from './Pages/Dashboard/Fees';
+import Settings from './Pages/Dashboard/Settings';
+
+
+
 
 
 // Import global styles
 import './styles/global.css'
-
-
 
 
 const router = createBrowserRouter([
@@ -62,13 +71,49 @@ const router = createBrowserRouter([
   {
     path: '/exam-page',
     element: <ExamPage />
-  }
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+    children: [
+      {
+        index: true,
+        element: <DashboardPage />, 
+      },
+      {
+        path: 'subjects-page',
+        element: <SubjectsPage />, 
+      },
+      {
+        path: 'timetable-page',
+        element: <TimeTable />,
+      },
+      {
+        path: 'video-record-page',
+        element: <VideoRecord/>,
+      },
+      {
+        path: 'result-page',
+        element: <Result />,
+      },
+      {
+        path: 'fees-page',
+        element: <Fees />,
+      },
+      {
+        path: 'settings-page',
+        element: <Settings />,
+      }
+    ]
+  },
+ 
 ]);
+
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+        <RouterProvider router={router} />
   </StrictMode>,
 )
 

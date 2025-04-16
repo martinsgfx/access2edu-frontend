@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import HeaderWeb from "../../components/HeaderWeb";
 import ExamHeaderMobile from "./ExamHeaderMobile";
-import ExamQuestionsMobile from "./ExamQuestionsMobile";
+import ExamQuestionsMobile from "./ExamQuestionsMobile"
+import { useNavigate } from "react-router-dom";
 
 const questions = [
   {
@@ -24,6 +25,8 @@ const questions = [
   },
 ];
 
+
+
 function ExamPageMobile() {
   const [timeLeft, setTimeLeft] = useState(40 * 60); // 40 mins
   const [answers, setAnswers] = useState({});
@@ -31,6 +34,8 @@ function ExamPageMobile() {
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [showCorrections, setShowCorrections] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -226,7 +231,7 @@ function ExamPageMobile() {
                 >
                   view corrections
                 </button>
-                <button className="bg-[#785491] text-white px-6 py-4 rounded-md">
+                <button onClick={() => navigate("/dashboard")} className="bg-[#785491] text-white px-6 py-4 rounded-md">
                   Get Started
                 </button>
               </div>

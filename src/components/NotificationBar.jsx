@@ -35,20 +35,20 @@ function stringAvatar(name) {
 function NotificationBar() {
   return (
     <div>
-      <div className="flex gap-4 items-center rounded-4xl p-6 pt-4 pb-4 bg-[#fdf4d9] shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]">
+      <div className="flex gap-4 items-center rounded-4xl p-6 pt-3 pb-3 bg-[#fdf4d9] shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]">
         {/* Email Icon */}
-        <div className="w-10 h-10 flex items-center justify-center bg-white rounded-4xl border border-[#9E7ABB]">
+        <div className="w-8 h-8 flex items-center justify-center bg-white rounded-4xl border border-[#9E7ABB]">
           <EmailIcon />
         </div>
 
         {/* Notification Icon */}
-        <div className="w-10 h-10 flex items-center justify-center bg-white rounded-4xl border border-[#9E7ABB]">
+        <div className="w-8 h-8 flex items-center justify-center bg-white rounded-4xl border border-[#9E7ABB]">
           <CircleNotificationsIcon />
         </div>
 
         {/* Avatar */}
         <div className="flex gap-2 items-center">
-          <Avatar {...stringAvatar("Kent Dodds")} />
+          <Avatar {...stringAvatar("Kent Dodds")} style={{width: 32 , height: 32}}/>
           <p>Kent Dodds</p>
         </div>
       </div>

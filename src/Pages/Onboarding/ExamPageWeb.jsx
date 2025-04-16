@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import HeaderWeb from "../../components/HeaderWeb";
 import ExamHeader from "./ExamHeader";
 import ExamQuestions from "./ExamQuestions";
+import { useNavigate } from "react-router-dom";
 
 const questions = [
   {
@@ -31,6 +32,8 @@ function ExamPageWeb() {
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [showCorrections, setShowCorrections] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -226,7 +229,7 @@ function ExamPageWeb() {
                 >
                   view corrections
                 </button>
-                <button className="bg-[#785491] text-white px-6 py-2 rounded-md">
+                <button onClick={() => navigate("/dashboard")}  className="bg-[#785491] text-white px-6 py-2 rounded-md">
                   Get Started
                 </button>
               </div>
