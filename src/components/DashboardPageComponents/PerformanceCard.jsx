@@ -1,3 +1,4 @@
+import { KeyboardArrowDown } from "@mui/icons-material";
 import React, { useState, useEffect } from "react";
 
 const CircularProgressBar = ({ percentage, color, title }) => {
@@ -18,7 +19,7 @@ const CircularProgressBar = ({ percentage, color, title }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-60 h-60">
+      <div className="relative md:w-60 w-50 md:h-60 h-50">
         {/* Background circle */}
         <svg className="w-full h-full" viewBox="0 0 200 200">
           <circle
@@ -114,7 +115,7 @@ function PerformanceCard() {
   };
 
   return (
-    <div className=" max-w-4xl mx-auto rounded-lg">
+    <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Performance</h1>
 
@@ -132,25 +133,12 @@ function PerformanceCard() {
             ))}
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 9l-7 7-7-7"
-              ></path>
-            </svg>
+            <KeyboardArrowDown />
           </div>
         </div>
       </div>
 
-      <div className="bg-white p-8 rounded-lg">
+      <div className="bg-white md:p-8 p-4 rounded-lg">
         <div className="flex flex-col md:flex-row justify-around">
           <div className="text-center mb-8 md:mb-0">
             <h2 className="text-2xl font-bold mb-6">Monthly Goals!</h2>

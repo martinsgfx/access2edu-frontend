@@ -7,7 +7,7 @@ function Result() {
   const [selectedTerm, setSelectedTerm] = useState("Term");
 
   return (
-    <div className="p-16">
+    <div className="md:p-16 p-6">
       <div className="bg-[#f3eff8] p-6 rounded-xl ">
         <h1 className="text-2xl font-bold mb-4">Results</h1>
         <hr className="mb-6" />

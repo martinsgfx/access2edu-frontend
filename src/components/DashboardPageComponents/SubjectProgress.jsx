@@ -11,7 +11,7 @@ function SubjectProgress() {
     ]);
     
     return (
-      <div className="bg-gray-50 rounded-3xl p-8 max-w-md mx-auto mt-12 shadow-sm">
+      <div className="bg-gray-50 rounded-3xl p-8 max-w-md  mt-12 shadow-sm">
         <h2 className="text-2xl font-bold text-center mb-10">Your subjects</h2>
         
         <div className="space-y-6">

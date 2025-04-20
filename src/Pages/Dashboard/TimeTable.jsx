@@ -6,7 +6,7 @@ import { useState } from 'react';
   const [selectedTerm, setSelectedTerm] = useState('Term');
   
   return (
-    <div className="p-15">
+    <div className="md:p-15 p-6">
       <div className="bg-purple-50 rounded-3xl overflow-hidden">
         {/* Header */}
         <div className="p-6">

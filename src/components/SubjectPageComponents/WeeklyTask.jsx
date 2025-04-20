@@ -25,7 +25,7 @@ function WeeklyTask() {
   ];
 
   return (
-    <div className="p-6 w-1/2">
+    <div className="md:p-6 p-3 md:w-1/2">
       <h1 className="text-2xl font-bold mb-4">Weekly Task</h1>
 
       <div className="flex justify-between items-center mb-4">
@@ -57,13 +57,13 @@ function WeeklyTask() {
           >
             <div className="flex gap-8">
               <div>
-                <h3 className="font-bold text-lg mb-4">{task.subject}</h3>
-                <p className="text-gray-600">{task.date}</p>
+                <h3 className="font-bold md:text-lg text-sm mb-4">{task.subject}</h3>
+                <p className="text-gray-600 md:text-xl text-sm">{task.date}</p>
               </div>
 
               <div className="grid items-center">
                 <p className="text-sm text-gray-500 mb-4">Duration</p>
-                <p>{task.duration}</p>
+                <p className="text-sm">{task.duration}</p>
               </div>
             </div>
 

@@ -11,17 +11,17 @@ function DashboardPage() {
   
 
   return (
-    <div className="p-15">
+    <div className="md:p-15 p-8">
       {/* Name Bar */}
       <DashboardPageHeader />   
 
-      <div className="flex mt-8 w-full gap-16">
-        <section  className="basis-[60%]">
+      <div className="md:flex grid md:mt-8 mt-8 w-full gap-16 ">
+        <section  className="md:basis-[60%]">
           <ClassCard />
           <PerformanceCard />
           <TeacherCard />
         </section>
-        <section className="basis-[40%] bg-[#e7def0] rounded-3xl p-8">
+        <section className="md:basis-[40%] bg-[#e7def0] rounded-3xl md:p-8 p-4">
           <Calendar />
           <ActivityList />
           <SubjectProgress />
