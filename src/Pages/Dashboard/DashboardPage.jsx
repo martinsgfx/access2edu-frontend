@@ -11,7 +11,7 @@ function DashboardPage() {
   
 
   return (
-    <div className="md:p-15 p-8">
+    <div className="md:p-15 p-6">
       {/* Name Bar */}
       <DashboardPageHeader />   
 

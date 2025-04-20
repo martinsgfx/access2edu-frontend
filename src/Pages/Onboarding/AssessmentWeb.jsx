@@ -119,6 +119,8 @@ function AssessmentWeb() {
 
   //Slides Content
   const steps = [
+
+    //Slide One
     <div
       key="1"
       className="bg-[#fcf8ef] p-12 rounded-xl shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]"
@@ -127,20 +129,22 @@ function AssessmentWeb() {
         Welcome To Access2Edu Entrance Exam
       </h2>
       <p className="text-xl mb-6">
-        This assessment will evaluate both your technical and soft skills to
-        create a comprehensive profile.
+        Access2Edu is a special platform designed to give every child—regardless
+        of their background or qualifications—a fair chance at quality
+        education. We believe that every child deserves the opportunity to
+        learn, grow, and succeed, no matter their circumstances.
       </p>
-      <div>
-        <p className="font-semibold mb-2">What To Expect</p>
+      <div className="mb-6">
+        <p className="font-semibold mb-2">Here’s What to Expect:</p>
         <ul className="list-disc ml-5 space-y-1 text-gray-700">
-          <li>The assessment will take approximately 30–35 minutes</li>
-          <li>You'll complete a mix of technical and soft skills questions</li>
-          <li>Read the essay to answer the question 1–15</li>
-          <li>You'll receive an admission upon completion with good mark</li>
+          <li>The exam will take about 45 minutes.</li>
+          <li>To take the exam, a registration fee of ₦2,000 is required.</li>
         </ul>
       </div>
+      <p>Please click “Continue” to see payment details and proceed.</p>
     </div>,
 
+    //Slide Two
     <div key="2">
       <form action="" onSubmit={handleSubmit} className="flex gap-4 ">
         <div className="p-6 bg-[#fcf8ef] text-[#3d3d3d] rounded-2xl shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]">
@@ -328,6 +332,8 @@ function AssessmentWeb() {
         </div>
       </form>
     </div>,
+
+    //Slide Three
     <div
       key="3"
       className="bg-[#fcf8ef] p-12 rounded-xl shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]"
@@ -339,7 +345,7 @@ function AssessmentWeb() {
         This assessment will evaluate both your technical and soft skills to
         create a comprehensive profile.
       </p>
-      <div>
+      <div className="mb-6">
         <p className="font-semibold mb-2">What To Expect</p>
         <ul className="list-disc ml-5 space-y-1 text-gray-700">
           <li>The assessment will take approximately 30–35 minutes</li>
@@ -349,6 +355,8 @@ function AssessmentWeb() {
         </ul>
       </div>
     </div>,
+
+    // Slide Four
     <div
       key="4"
       className="bg-[#fcf8ef] p-12 grid rounded-xl shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]"

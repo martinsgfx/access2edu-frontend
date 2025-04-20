@@ -137,7 +137,7 @@ function VideoRecord() {
   };
 
   return (
-    <div className="p-15 ">
+    <div className="md:p-15 p-6">
       <h1 className="text-3xl font-bold mb-6">Your Subject</h1>
 
       {/* Progress Bar */}

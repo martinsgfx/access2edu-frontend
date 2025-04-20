@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { KeyboardArrowDown } from "@mui/icons-material";
 
 function SelectClassesWeb() {
   const [selectedClass, setSelectedClass] = useState("");
@@ -10,7 +11,7 @@ function SelectClassesWeb() {
   const [error, setError] = useState("");
   const [stage, setStage] = useState(1);
   const [jssCompleted, setJssCompleted] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleClassSelect = (e) => {
     const value = e.target.value;
@@ -77,8 +78,8 @@ function SelectClassesWeb() {
     <div className="loginContainer">
       <div className="leftLogin p-10">
         <div className="bg-[#fff5d1] grid p-10 rounded-xl w-full h-auto">
-          <div className="w-full mb-6 flex justify-between items-center">
-            <div className="relative w-full h-6">
+          <div className="w-full mb-6 flex gap-8 items-center">
+            <div className="relative w-full flex items-center h-6">
               <div className="absolute inset-0 bg-[#BCA0D2] h-3 rounded-full"></div>
               <div
                 className="absolute top-0 h-3 bg-[#785491] rounded-full transition-all duration-300"
@@ -91,15 +92,17 @@ function SelectClassesWeb() {
                 {progress === 0 ? "0" : progress}
               </div>
             </div>
-            <span
-              className="text-sm text-gray-600 cursor-pointer flex pl-2 pr-2 gap-2"
+            <div
+              className="text-sm text-gray-600 cursor-pointer flex items-center pl-2 pr-2 gap-2"
               onClick={() => navigate("/onboarding")}
             >
               Skip <ArrowForwardIcon />
-            </span>
+            </div>
           </div>
 
-          <h1 className="text-3xl text-center font-bold mb-6">Select Your Class</h1>
+          <h1 className="text-3xl text-center font-bold mb-6">
+            Select Your Class
+          </h1>
 
           {stage === 1 && (
             <>
@@ -171,15 +174,18 @@ function SelectClassesWeb() {
 
           {stage === 2 && selectedClass === "SSS" && (
             <>
-              <div className="w-full mb-4">
+              <div className="w-full mb-4 relative">
                 <select
                   disabled
-                  className="w-full border border-gray-300 px-4 py-2 rounded text-[#785491] font-semibold bg-[#BCA0D2] cursor-not-allowed"
+                  className="w-full appearance-none border border-gray-300 px-4 py-2 rounded text-[#785491] font-semibold bg-[#BCA0D2] cursor-not-allowed"
                 >
                   <option>
                     {selectedClass} ({selectedLevel})
                   </option>
                 </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <KeyboardArrowDown />
+                </div>
               </div>
 
               <div className="w-full mt-2 space-y-4">
