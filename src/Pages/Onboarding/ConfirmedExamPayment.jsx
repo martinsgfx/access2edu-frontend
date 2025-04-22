@@ -4,7 +4,7 @@ function ConfirmedExamPayment({ isOpen, onClose, handleContinue }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-fuchsia-950/20 flex items-center justify-center z-50">
+    <div className="fixed inset-0 backdrop-blur-sm bg-gray-600/50 flex items-center justify-center z-50">
       <div className="grid justify-items-center rounded-2xl p-10 ml-4 mr-4 bg-[#fff5d1]">
         <img
           src="/success.png"

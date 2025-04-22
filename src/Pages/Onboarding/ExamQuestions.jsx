@@ -3,7 +3,7 @@ import React from "react";
 function ExamQuestions({ number, question, selected, onSelect }) {
   return (
     <div className="mb-8 p-10 pt-0 text-[#3d3d3d]">
-    <p className="text-lg mb-4">
+    <p className="text-2xl mb-4">
       {number}. {question.text}
     </p>
     <div className="space-y-2 pb-2 text-2xl">

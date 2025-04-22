@@ -74,7 +74,7 @@ function NotificationBar() {
             {...stringAvatar("Kent Dodds")}
             style={{ width: 32, height: 32 }}
           />
-          <p>Kent Dodds</p>
+          <p>Stanley Emma</p>
         </div>
       </div>
 
@@ -92,7 +92,7 @@ function NotificationBar() {
         </div>
 
         {isOpen && (
-          <div className="absolute right-0 top-12 mt-1 bg-[#fdf4d9] rounded-lg shadow-lg w-48 py-1 z-50">
+          <div className="absolute right-0 top-12 mt-1 bg-[#fdf4d9] rounded-lg shadow-lg w-50 py-1 z-50">
 
             <div className="px-4 py-3 border-b flex gap-4 items-center hover:bg-[#eeecd9] cursor-pointer border-gray-100">
               <div className="w-8 h-8 flex items-center justify-center bg-white rounded-4xl border border-[#9E7ABB]">
@@ -113,7 +113,7 @@ function NotificationBar() {
                 {...stringAvatar("Kent Dodds")}
                 style={{ width: 32, height: 32 }}
               />
-              <p>Kent Dodds</p>
+              <p>Stanley Emma</p>
             </div>
 
           </div>

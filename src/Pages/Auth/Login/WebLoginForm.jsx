@@ -1,7 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { loginStudent } from "../../../services/studentServices"; // Import loginStudent
 import "./Login.css";
 import SocialMediaWebSignIn from "./SocialMediaWebSignIn";
 
@@ -23,38 +23,45 @@ function WebLoginForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
 
     if (!formData.email || !formData.password) {
-      setError(() => {
-        return (
-          <p className="text-red-400">
-            {!formData.email ? "Email is required" : "Password is required"}
-          </p>
-        );
-      });
+      setError(
+        !formData.email ? "Email is required" : "Password is required"
+      );
+      setIsSubmitting(false);
       return;
     }
 
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert(`Logged in as ${formData.email}`);
-    }, 1500);
+    try {
+      // Used loginStudent from studentServices
+      const response = await loginStudent(formData);
 
-    setError(newErrors);
+      // Handle success response
+      if (response.status === 200) {
+        const { token } = response.data; 
 
-    if (Object.keys(newErrors).length === 0) {
-      // Simulate storing token
-      const token = "fake-auth-token";
-      if (keepMeSignedIn) {
-        localStorage.setItem("authToken", token);
-      } else {
-        sessionStorage.setItem("authToken", token);
+        // Store the token
+        if (keepMeSignedIn) {
+          localStorage.setItem("authToken", token);
+        } else {
+          sessionStorage.setItem("authToken", token);
+        }
+
+        // Redirect or show success message
+        alert("Login successful!");
+        console.log("Logged in as:", formData.email);
       }
-      console.log("Form submitted! Auth token saved.");
+    } catch (err) {
+      // Handle error response
+      setError(
+        err.response?.data?.message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -63,11 +70,8 @@ function WebLoginForm() {
       <form onSubmit={handleSubmit} className="grid gap-5 p-6" action="">
         {/* Email */}
         <div className="grid gap-2">
-          {/* <label htmlFor="email" className="text-bold">
-            Email
-          </label> */}
           <input
-            className="email  p-4"
+            className="email p-4"
             type="email"
             id="email"
             name="email"
@@ -78,12 +82,7 @@ function WebLoginForm() {
         </div>
 
         {/* Password */}
-
         <div className="grid gap-2">
-          {/* <label htmlFor="password" className="text-bold">
-            Password
-          </label> */}
-
           <div className="passwordWrapper">
             <input
               className="password pwordSpace p-4"
@@ -103,14 +102,11 @@ function WebLoginForm() {
           </div>
         </div>
 
-        {error && <p>{error}</p>}
+        {error && <p className="text-red-400">{error}</p>}
 
         {/* Forgot Password */}
-
         <div className="flex justify-between pt-5 pb-5">
-          {/* Checkbox */}
-
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
               name="keepSignedIn"
@@ -140,25 +136,26 @@ function WebLoginForm() {
           disabled={isSubmitting}
         >
           {isSubmitting ? "Logging in..." : "Login"}
-        </button>        
+        </button>
       </form>
-      <div className="otherSignIn grid gap-3 p-6">
-          {/* Divider with text */}
-          <div className="flex items-center w-full my-2 mt-8">
-            <div className="flex-grow border-t border-gray-300"></div>
-            <span className="px-4 text-gray-500">Or Sign in with</span>
-            <div className="flex-grow border-t border-gray-300"></div>
-          </div>
 
-          <SocialMediaWebSignIn />
+      <div className="otherSignIn grid gap-3 p-6">
+        {/* Divider with text */}
+        <div className="flex items-center w-full my-2 mt-8">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="px-4 text-gray-500">Or Sign in with</span>
+          <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        <p className="p-4 pl-0 flex gap-1 justify-center">
-          Not a Student yet?{" "}
-          <span className="text-[#785491] font-semibold">
-            <a href="/Signup">Sign Up</a>
-          </span>
-        </p>
+        <SocialMediaWebSignIn />
+      </div>
+
+      <p className="p-4 pl-0 flex gap-1 justify-center">
+        Not a Student yet?{" "}
+        <span className="text-[#785491] font-semibold">
+          <a href="/Signup">Sign Up</a>
+        </span>
+      </p>
     </div>
   );
 }

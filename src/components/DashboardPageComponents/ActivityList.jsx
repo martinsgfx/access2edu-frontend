@@ -24,7 +24,7 @@ function ActivityList() {
                 <div className="bg-[#D9D9D9] w-20 h-20 rounded-lg mr-4">
                 </div>
                 <div>
-                    <h3 className='font-bold text-lg mt-2'>Ass. Submittion</h3>
+                    <h3 className='font-bold text-lg mt-2'>Ass. Submission</h3>
                     <p className='text-[#464646]'>{formatDate(dueDate)}</p>
                 </div>
             </div>
@@ -32,7 +32,7 @@ function ActivityList() {
                 <div className="bg-[#D9D9D9] w-20 h-20 rounded-lg mr-4">
                 </div>
                 <div>
-                    <h3 className='font-bold text-lg mt-2'>Ass. Submittion</h3>
+                    <h3 className='font-bold text-lg mt-2'>Ass. Submission</h3>
                     <p className='text-[#464646]'>{formatDate(dueDate)}</p>
                 </div>
             </div>
@@ -40,7 +40,7 @@ function ActivityList() {
                 <div className="bg-[#D9D9D9] w-20 h-20 rounded-lg mr-4">
                 </div>
                 <div>
-                    <h3 className='font-bold text-lg mt-2'>Ass. Submittion</h3>
+                    <h3 className='font-bold text-lg mt-2'>Ass. Submission</h3>
                     <p className='text-[#464646]'>{formatDate(dueDate)}</p>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { registerStudent } from "../../../services/studentServices"; // Import API function
 import "./Signup.css";
 
 function SignupForm() {
@@ -14,15 +15,13 @@ function SignupForm() {
     confirmPassword: "",
   }); // Form Data
 
-  const [email, setEmail] = useState(""); // Email Value
   const [emailError, setEmailError] = useState(""); // Email Error
-  const [password, setPassword] = useState(""); // Password Value
   const [passwordError, setPasswordError] = useState(""); // Password Error
-  const [confirmPassword, setConfirmPassword] = useState(""); // Confirm Password Value
   const [confirmPasswordError, setConfirmPasswordError] = useState(""); // Confirm Password Error
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formMessage, setFormMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -34,13 +33,13 @@ function SignupForm() {
 
   const validateEmail = (event) => {
     const value = event.target.value;
-    setEmail(value);
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     if (!isValid) {
       setEmailError("Please enter a valid email address");
     } else {
       setEmailError("");
     }
+    setFormData((prev) => ({ ...prev, email: value }));
   };
 
   const handlePasswordChange = (event) => {
@@ -53,47 +52,76 @@ function SignupForm() {
     } else {
       setPasswordError("");
     }
-    setPassword(value);
+    setFormData((prev) => ({ ...prev, password: value }));
   };
 
   const handleConfirmPasswordChange = (event) => {
     const value = event.target.value;
-    if (value !== password) {
+    if (value !== formData.password) {
       setConfirmPasswordError("Passwords do not match");
     } else {
       setConfirmPasswordError("");
     }
-    setConfirmPassword(value);
+    setFormData((prev) => ({ ...prev, confirmPassword: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!formData.fName || !formData.lName || !email || !formData.gName ||  !password || !confirmPassword) {
-      setFormMessage( () => {
-        return (
-          <div >
-            <p className="text-red-400 bg-red-200 p-4 rounded-lg text-center font-medium" >Please fill in all fields</p>
-          </div>
-        )
-      });
-  
-    }  else {
-      setFormMessage(() => {
-        return (
-          <div>
-            <p className="text-green-400 text-center bg-green-200 p-4 rounded-lg font-medium">
-            "Form submitted successfully!"
-            </p>
-          </div>
-        );
-      });
-      navigate("/signup-confirmation");
+    setFormMessage("");
+    setIsSubmitting(true);
+
+    if (
+      !formData.fName ||
+      !formData.lName ||
+      !formData.email ||
+      !formData.gName ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      setFormMessage(
+        <p className="text-red-400 bg-red-200 p-4 rounded-lg text-center font-medium">
+          Please fill in all fields
+        </p>
+      );
+      setIsSubmitting(false);
+      return;
     }
-    
+
+    if (formData.password !== formData.confirmPassword) {
+      setFormMessage(
+        <p className="text-red-400 bg-red-200 p-4 rounded-lg text-center font-medium">
+          Passwords do not match
+        </p>
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      // Call the API to register the student
+      await registerStudent(formData);
+
+      setFormMessage(
+        <p className="text-green-700 bg-green-100 p-4 rounded-lg text-center font-medium">
+          Registration successful! Redirecting to login...
+        </p>
+      );
+
+      // Redirect to login page after a delay
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (err) {
+      setFormMessage(
+        <p className="text-red-400 bg-red-200 p-4 rounded-lg text-center font-medium">
+          {err.response?.data?.message || "Failed to register. Try again."}
+        </p>
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}  action="" className="grid gap-3 p-6">
+    <form onSubmit={handleSubmit} action="" className="grid gap-3 p-6">
       {/* First Name */}
       <div className="grid gap-2">
         <label htmlFor="fName">Firstname</label>
@@ -110,7 +138,7 @@ function SignupForm() {
 
       {/* Last Name */}
       <div className="grid gap-2">
-        <label htmlFor="lName">Surname </label>
+        <label htmlFor="lName">Surname</label>
         <input
           type="text"
           name="lName"
@@ -131,7 +159,7 @@ function SignupForm() {
           id="email"
           placeholder="Email Address"
           className="p-4 border-1 border-[#7c7c7c] rounded-md"
-          value={email}
+          value={formData.email}
           onChange={validateEmail}
         />
         {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
@@ -139,7 +167,7 @@ function SignupForm() {
 
       {/* Parent/Guardian Name */}
       <div className="grid gap-2">
-        <label htmlFor="GName">Parent/Guardian Name</label>
+        <label htmlFor="gName">Parent/Guardian Name</label>
         <input
           type="text"
           name="gName"
@@ -161,7 +189,7 @@ function SignupForm() {
             id="password"
             placeholder="Password"
             className="p-4 border-1 pwordSpace border-[#7c7c7c] rounded-md"
-            value={password}
+            value={formData.password}
             onChange={handlePasswordChange}
           />
           <span
@@ -186,7 +214,7 @@ function SignupForm() {
             id="confimPassword"
             placeholder="Confirm Password"
             className="p-4 border-1 pwordSpace border-[#7c7c7c] rounded-md"
-            value={confirmPassword}
+            value={formData.confirmPassword}
             onChange={handleConfirmPasswordChange}
           />
           <span
@@ -202,22 +230,21 @@ function SignupForm() {
       </div>
 
       {/* Button */}
-      {formMessage && <p className="mt-2 text-sm text-red-500">{formMessage}</p>}
+      {formMessage && <div className="mt-2">{formMessage}</div>}
       <button
-        className=" mt-5 p-4 rounded-lg bg-[#785491] text-white"
-        type="submit"        
+        className="mt-5 p-4 rounded-lg bg-[#785491] text-white"
+        type="submit"
+        disabled={isSubmitting}
       >
-        Submit
+        {isSubmitting ? "Submitting..." : "Submit"}
       </button>
-      
-
 
       <p className="p-4 pl-0 flex justify-center">
-          Already have an account {" "}
-          <span className="text-[#785491] font-semibold pl-2">
-            <a href="/Login"> Log In</a>
-          </span>
-        </p>
+        Already have an account{" "}
+        <span className="text-[#785491] font-semibold pl-2">
+          <a href="/Login"> Log In</a>
+        </span>
+      </p>
     </form>
   );
 }

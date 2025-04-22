@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { forgotPassword } from "../../../services/studentServices"; // Import API function
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 function ResetPasswordWeb() {
   const [password, setPassword] = useState(""); // Password Value
@@ -10,6 +12,10 @@ function ResetPasswordWeb() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formMessage, setFormMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [searchParams] = useSearchParams(); // To get the reset token from the URL
+  const navigate = useNavigate();
 
   const handlePasswordChange = (event) => {
     const value = event.target.value;
@@ -34,34 +40,54 @@ function ResetPasswordWeb() {
     setConfirmPassword(value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setFormMessage("");
+    setIsSubmitting(true);
+
     if (!password || !confirmPassword) {
-      setFormMessage(() => {
-        return (
-          <div>
-            <p className="text-red-400 bg-red-100 p-4 text-center font-medium">
-              Please fill in all fields
-            </p>
-          </div>
-        );
-      });
-    } else if (password === confirmPassword) {
-      setFormMessage(() => {
-        return (
-          <p className="text-green-700 bg-green-100 p-4 text-center font-medium">
-            Password changed successfully!
-          </p>
-        );
-      });
-    } else {
-      setFormMessage(() => {
-        return (
-          <p className="text-red-400 bg-red-100 p-4 text-center font-medium">
-            Passwords do not match
-          </p>
-        );
-      });
+      setFormMessage(
+        <p className="text-red-400 bg-red-100 p-4 text-center font-medium">
+          Please fill in all fields
+        </p>
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setFormMessage(
+        <p className="text-red-400 bg-red-100 p-4 text-center font-medium">
+          Passwords do not match
+        </p>
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      // Get the reset token from the URL
+      const token = searchParams.get("token");
+
+      // Call the API to reset the password
+      await forgotPassword({ newPassword: password, token });
+
+      setFormMessage(
+        <p className="text-green-700 bg-green-100 p-4 text-center font-medium">
+          Password reset successfully! Redirecting to login...
+        </p>
+      );
+
+      // Redirect to login page after a delay
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (err) {
+      setFormMessage(
+        <p className="text-red-400 bg-red-100 p-4 text-center font-medium">
+          {err.response?.data?.message || "Failed to reset password. Try again."}
+        </p>
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -70,12 +96,10 @@ function ResetPasswordWeb() {
       <h1 className="font-bold text-center text-2xl p-6 pb-1">
         Reset Password
       </h1>
-      <p className="text-center">Please enter your new password</p>
+      <p className="text-center mt-4 p-4 bg-red-200 text-red-600 rounded-lg ">Please enter your new password</p>
 
       <form onSubmit={handleSubmit} className="grid gap-3 mt-5 mb-3">
-        {formMessage && (
-          <p className="mt-2 text-sm text-red-500">{formMessage}</p>
-        )}
+        {formMessage && <div className="mt-2">{formMessage}</div>}
 
         {/* Enter Password  */}
         <div className="grid gap-2 w-full">
@@ -131,8 +155,9 @@ function ResetPasswordWeb() {
         <button
           className="bg-[#BCA0D2] mt-5 p-4 rounded-lg hover:bg-[#785491] text-[#000000] hover:text-white"
           type="submit"
+          disabled={isSubmitting}
         >
-          Submit
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
       <p className="p-4 pl-0 flex justify-center">

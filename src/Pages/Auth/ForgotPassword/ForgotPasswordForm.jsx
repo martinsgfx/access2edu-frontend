@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  sendForgotPasswordOTP,
+  forgotPassword,
+} from "../../../services/studentServices"; // Import API functions
 
 function ForgotPasswordForm() {
-  const [step, setStep] = useState("request"); // 'request' | 'otp'
+  const [step, setStep] = useState("request"); // 'request' | 'otp' | 'reset'
   const [email, setEmail] = useState(""); // User Email
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]); // Otp
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]); // OTP
+  const [newPassword, setNewPassword] = useState(""); // New Password
+  const [confirmPassword, setConfirmPassword] = useState(""); // Confirm Password
   const [alert, setAlert] = useState({
     type: "error",
     message: (
@@ -14,12 +20,9 @@ function ForgotPasswordForm() {
       </div>
     ),
   }); // Alert Message
-
-  const [timer, setTimer] = useState(60); // Otp Timer
-  const [canResend, setCanResend] = useState(false); // Resebd Otp Timer
+  const [timer, setTimer] = useState(60); // OTP Timer
+  const [canResend, setCanResend] = useState(false); // Resend OTP Timer
   const navigate = useNavigate();
-
-  const knownEmails = ["user@example.com", "admin@test.com"]; // Dummy emails
 
   useEffect(() => {
     let countdown;
@@ -34,46 +37,31 @@ function ForgotPasswordForm() {
     return () => clearInterval(countdown);
   }, [step, timer]);
 
-  function handleRequestOtp() {
-                                                                                                         // Otp request handler
+  async function handleRequestOtp() {
     if (!email.includes("@")) {
       setAlert({ type: "error", message: "Enter a valid email address." });
       return;
     }
 
-    if (!knownEmails.includes(email)) {
-                                                                                                              // Invalid Email
+    try {
+      // Send OTP request to the API
+      await sendForgotPasswordOTP(email);
+      setAlert({
+        type: "success",
+        message: "OTP sent successfully. Check your email.",
+      });
+      setTimer(60);
+      setCanResend(false);
+      setStep("otp");
+    } catch (err) {
       setAlert({
         type: "error",
-        message: (
-          <div className="flex justify-center justify-self-center items-center gap-3">
-            <img src="public/notificationIcon.svg" alt="notification" />
-            <p className="text-sm">
-              This email is not registered in our system.
-            </p>
-          </div>
-        ),
+        message: err.response?.data?.message || "Failed to send OTP.",
       });
-      return;
     }
-
-    setAlert({
-                                                                                                                            // Default alert
-      type: "error",
-      message: (
-        <div className="flex justify-center justify-self-center items-center gap-3">
-          <img src="public/notificationIcon.svg" alt="notification" />
-          <p className="text-sm">Follow instructions to set your password</p>
-        </div>
-      ),
-    });
-    setTimer(60);
-    setCanResend(false);
-    setStep("otp");
   }
 
   function handleOtpChange(value, index) {
-                                                                                                // Handle change of Otp
     if (/[^0-9]/.test(value)) return;
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -83,64 +71,78 @@ function ForgotPasswordForm() {
     }
   }
 
-  function handleVerify() {
+  async function handleVerify() {
     const otpValue = otp.join("");
     if (otpValue.length < 6) {
       setAlert({ type: "error", message: "Please enter the 6-digit code." });
       return;
     }
 
-    const correctOtp = "123456";                                                            // Simulated correct OTP
-
-    if (otpValue !== correctOtp) {
+    try {
+      // Verify OTP with the API
+      await forgotPassword(otpValue, null); // Pass OTP only for verification
+      setAlert({
+        type: "success",
+        message: "OTP verified. You can now reset your password.",
+      });
+      setStep("reset");
+    } catch (err) {
       setAlert({
         type: "error",
-        message: (
-          <div className="flex justify-center justify-self-center items-center gap-3">
-            <img src="public/notificationIcon.svg" alt="notification" />
-            <p className="text-sm ">Incorrect OTP. Please try again.</p>
-          </div>
-        ),
-      });                                                                               // Check if Otp is correct if Incorrect throw alert
+        message:
+          err.response?.data?.message || "Invalid OTP. Please try again.",
+      });
+    }
+  }
+
+  async function handleResetPassword() {
+    if (newPassword !== confirmPassword) {
+      setAlert({ type: "error", message: "Passwords do not match." });
       return;
     }
 
-    setAlert({
-                                                                                       // Check for correct Otp throw correct otp alert
-      type: "success",
-      message: (
-        <div className="flex justify-center justify-self-center items-center gap-3">
-          <img src="public/notificationIconGreen.svg" alt="notification" />
-          <p className="text-sm text-center">OTP verified. Redirecting...</p>
-        </div>
-      ),
-    });
-
-    setTimeout(() => navigate("/reset-password"), 1500);
-  }
-
-  const handleResend = () => {
-    if (canResend) {
-      setOtp(["", "", "", "", "", ""]);
-      setTimer(60);
-      setCanResend(false);
+    try {
+      // Reset password with the API
+      await forgotPassword(null, newPassword); // Pass new password for reset
       setAlert({
         type: "success",
-        message: (
-          <div className="flex justify-center justify-self-center items-center gap-3">
-            <img src="public/notificationIconGreen.svg" alt="notification" />
-            <p className="text-sm text-center">OTP resent successfully.</p>
-          </div>
-        ),
+        message: "Password reset successfully. Redirecting to login...",
       });
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (err) {
+      setAlert({
+        type: "error",
+        message:
+          err.response?.data?.message || "Failed to reset password. Try again.",
+      });
+    }
+  }
+
+  const handleResend = async () => {
+    if (canResend) {
+      try {
+        await sendForgotPasswordOTP(email);
+        setOtp(["", "", "", "", "", ""]);
+        setTimer(60);
+        setCanResend(false);
+        setAlert({
+          type: "success",
+          message: "OTP resent successfully.",
+        });
+      } catch (err) {
+        setAlert({
+          type: "error",
+          message: err.response?.data?.message || "Failed to resend OTP.",
+        });
+      }
     }
   };
 
   function renderAlert() {
-    if (alert.message) {
+    if (alert) {
       return (
         <div
-          className={`flex justify-center justify-self-center items-center gap-3 p-4  rounded-lg w-fit ${
+          className={`flex justify-self-center items-center gap-3 p-4 rounded-lg w-fit ${
             alert.type === "error"
               ? "text-red-700 bg-red-100"
               : "text-green-700 bg-green-100"
@@ -156,58 +158,40 @@ function ForgotPasswordForm() {
   return (
     <div className="bg-[#F9F5F2] rounded-2xl shadow-[0px_0px_12px_rgba(0,0,0,0.17)]">
       <div className="grid justify-center items-center gap-3 p-4 pb-20 w-full">
-        {step === "request" ? (
+        {step === "request" && (
           <div>
-            <h1 className="font-bold text-center text-2xl p-6  ">
+            <h1 className="font-bold text-center text-2xl p-6">
               Forgot Password?
             </h1>
-
             {renderAlert()}
-
-            <p className="text-center p-6 pl-4 pr-4 text-[#525252]">
-              Enter your registered email below to recieve password reset
-              instructions
+            <p className="text-center p-6 text-[#525252]">
+              Enter your registered email below to receive password reset
+              instructions.
             </p>
-            <div className="grid gap-2 w-full">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                placeholder="Email Address"
-                className=" text-[#7C7C7C] w-ful p-4 border-1 border-[#7C7C7C] rounded-[10px] bg-[#F5F5F5]"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="flex justify-self-end">
-              <p className="flex pt-6 pb-6 gap-2 text-[#525252]">
-                Remember your password?{" "}
-                <a href="/login" className="text-[#563A68] ">
-                  Login
-                </a>
-              </p>
-            </div>
-
+            <input
+              type="email"
+              placeholder="Email Address"
+              className="p-4 border rounded-lg w-full"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <button
               onClick={handleRequestOtp}
-              className="bg-[#BCA0D2] hover:bg-[#785491] text-black font-medium text-base rounded-lg p-4 w-full"
+              className="bg-[#BCA0D2] hover:bg-[#785491] text-black font-medium text-base rounded-lg p-4 w-full mt-4"
             >
               Request OTP
             </button>
           </div>
-        ) : (
+        )}
+
+        {step === "otp" && (
           <div>
             <h1 className="font-bold text-center text-2xl p-6">Enter OTP</h1>
-
             {renderAlert()}
-
-            <p className="text-center p-6 pb-0 text-[#525252]">
-              Enter the six (6) digit code sent to your email address
+            <p className="text-center p-6 text-[#525252]">
+              Enter the six (6) digit code sent to your email address.
             </p>
-            <p className="text-center font-semibold">
-              {email.replace(/(.{3}).*(@.*)/, "$1*******$2")}
-            </p>
-            <div className="flex justify-between gap-0.5 p-6 ">
+            <div className="flex justify-between gap-2">
               {otp.map((digit, i) => (
                 <input
                   key={i}
@@ -216,29 +200,57 @@ function ForgotPasswordForm() {
                   maxLength="1"
                   value={digit}
                   onChange={(e) => handleOtpChange(e.target.value, i)}
-                  className="w-12 h-12 text-center text-xl border bg-[#f5f5f5] rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-12 h-12 text-center text-xl border rounded-lg"
                 />
               ))}
             </div>
-
             <button
               onClick={handleVerify}
-              className="bg-[#785491] hover:bg-[#785491] text-white font-medium text-base rounded-lg p-4 mb-6 w-full"
+              className="bg-[#785491] text-white font-medium text-base rounded-lg p-4 w-full mt-4"
             >
-              Verify
+              Verify OTP
             </button>
             <button
               onClick={handleResend}
               disabled={!canResend}
-              className={`w-full rounded-md border ${
+              className={`w-full mt-2 rounded-lg p-4 ${
                 canResend
-                  ? "border-[#656565] text-[#3D3D3D] hover:bg-gray-100 p-4"
-                  : "border-gray-200 text-gray-400 cursor-not-allowed p-4"
+                  ? "bg-gray-200 text-black"
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
               }`}
             >
               {canResend
                 ? "Resend OTP"
                 : `Resend OTP in 00:${timer < 10 ? "0" + timer : timer}`}
+            </button>
+          </div>
+        )}
+
+        {step === "reset" && (
+          <div>
+            <h1 className="font-bold text-center text-2xl p-6">
+              Reset Password
+            </h1>
+            {renderAlert()}
+            <input
+              type="password"
+              placeholder="New Password"
+              className="p-4 border rounded-lg w-full mt-4"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="p-4 border rounded-lg w-full mt-4"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <button
+              onClick={handleResetPassword}
+              className="bg-[#785491] text-white font-medium text-base rounded-lg p-4 w-full mt-4"
+            >
+              Reset Password
             </button>
           </div>
         )}

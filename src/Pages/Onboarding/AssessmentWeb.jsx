@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderWeb from "../../components/HeaderWeb";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import { initiateCardPayment } from "../../services/studentServices";
+
 import ConfirmedExamPayment from "./ConfirmedExamPayment";
+import axios from "axios";
 
 function AssessmentWeb() {
   //Slide
@@ -11,65 +11,63 @@ function AssessmentWeb() {
   const totalSteps = 4;
   const progress = (step / totalSteps) * 100;
 
-  //Form
-  const [formData, setFormData] = useState({
-    cardName: "",
-    cardNumber: "",
-    cardMonth: "",
-    cardYear: "",
-    cvv: "",
-    discountCode: "",
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
+  // State for error message
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  //Payment Button
+  const PayButton = ({ email, amount }) => {
+    const handlePayment = async () => {
+      try {
+        // Clear any previous error message
+        setErrorMessage("");
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSuccess("");
+        // Fetch data from backend
+        const res = await axios.post(
+          "http://localhost:5000/api/create-payment",
+          {
+            email,
+            amount,
+          }
+        );
+        const { publicKey, email: userEmail, amount: amt, ref } = res.data;
 
-    try {
-      // initiateCardPayment function from studentServices
-      const response = await initiateCardPayment(formData);
-
-      // Handle success response
-      if (response.status === 200) {
-        setSuccess("Payment successful!");
-        setIsPaymentSuccessful(true);
-        setFormData({
-          cardName: "",
-          cardNumber: "",
-          cardMonth: "",
-          cardYear: "",
-          cvv: "",
-          discountCode: "",
+        const paystack = window.PaystackPop.setup({
+          key: publicKey,
+          email: userEmail,
+          amount: amt * 100, // Paystack uses kobo
+          currency: "NGN",
+          ref,
+          callback: (response) => {
+            alert("Payment complete! Reference: " + response.reference);
+            // Optionally, send response.reference to backend to verify
+          },
+          onClose: () => {
+            handleNext(); // Proceed to the next step when payment is closed
+          },
         });
+        paystack.openIframe();
+      } catch (error) {
+        // Handle network or API errors
+        setErrorMessage(
+          "Failed to initiate payment. Please check your network connection and try again."
+        );
+        console.error("Payment error:", error);
       }
-    } catch (err) {
-      // Handle error response
-      setError(
-        err.response?.data?.message || "Something went wrong. Please try again."
-      );
-      setIsPaymentSuccessful(false);
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    return (
+      <div>
+        {/* Payment Button */}
+        <button
+          onClick={handlePayment}
+          className="bg-[#785491] text-white w-full hover:bg-[#f3eff8] hover:text-[#3d3d3d] px-4 py-4 font-semibold rounded-lg"
+        >
+          Make Payment
+        </button>
+      </div>
+    );
   };
 
   //Date and Time
@@ -119,7 +117,6 @@ function AssessmentWeb() {
 
   //Slides Content
   const steps = [
-
     //Slide One
     <div
       key="1"
@@ -146,136 +143,7 @@ function AssessmentWeb() {
 
     //Slide Two
     <div key="2">
-      <form action="" onSubmit={handleSubmit} className="flex gap-4 ">
-        <div className="p-6 bg-[#fcf8ef] text-[#3d3d3d] rounded-2xl shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]">
-          <h1 className="mb-20 font-bold text-4xl">SELECT PAYMENT METHOD</h1>
-          <div className="flex gap-4 mb-10 ">
-            <div className="flex active:bg-[#785491] hover:bg-[#f3eff8] hover:border-[#f3eff8] hover:text-[#3d3d3d] border border-[#3d3d3d] text-[#3d3d3d] active:text-white p-4 pl-8 pr-8 rounded-md gap-2">
-              {" "}
-              <CreditCardIcon /> <p>Card</p>{" "}
-            </div>
-            <div className="flex active:bg-[#785491] hover:bg-[#f3eff8] hover:border-[#f3eff8] hover:text-[#3d3d3d] border border-[#3d3d3d] text-[#3d3d3d] active:text-white p-4 pl-8 pr-8 rounded-md gap-2">
-              {" "}
-              <CreditCardIcon /> <p>Transfer</p>{" "}
-            </div>
-            <div className="flex active:bg-[#785491] hover:bg-[#f3eff8] hover:border-[#f3eff8] hover:text-[#3d3d3d] border border-[#3d3d3d] text-[#3d3d3d] active:text-white p-4 pl-8 pr-8 rounded-md gap-2">
-              <CreditCardIcon /> <p>Others</p>
-            </div>
-          </div>
-
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <label
-                htmlFor="cardName"
-                className="font-semibold text-[#3d3d3d]"
-              >
-                {" "}
-                NAME ON CARD{" "}
-              </label>
-              <input
-                type="text"
-                name="cardName"
-                id="cardName"
-                placeholder="Enter card name"
-                value={formData.cardName}
-                onChange={handleChange}
-                className="p-4 border rounded-md border-[#3d3d3d]"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <label
-                htmlFor="cardNumber"
-                className="font-semibold text-[#3d3d3d]"
-              >
-                {" "}
-                CARD NUMBER{" "}
-              </label>
-              <input
-                type="number"
-                name="cardNumber"
-                id="cardNumber"
-                placeholder="0000 0000 0000 0000"
-                value={formData.cardNumber}
-                onChange={handleChange}
-                className="p-4 border rounded-md border-[#3d3d3d]"
-                required
-              />
-            </div>
-            <div className="flex gap-2 ">
-              <div className="grid gap-2">
-                <label
-                  htmlFor="cardMonth"
-                  className="font-semibold text-[#3d3d3d]"
-                >
-                  MONTH
-                </label>
-                <input
-                  type="month"
-                  name="cardMonth"
-                  id="cardMonth"
-                  placeholder="Select Month"
-                  value={formData.cardMonth}
-                  onChange={handleChange}
-                  className="p-4 border rounded-md border-[#3d3d3d]"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <label
-                  htmlFor="cardYear"
-                  className="font-semibold text-[#3d3d3d]"
-                >
-                  YEAR
-                </label>
-                <input
-                  type="text"
-                  name="cardYear"
-                  id="cardYear"
-                  value={formData.cardYear}
-                  onChange={handleChange}
-                  placeholder="YYYY"
-                  className="p-4 border rounded-md border-[#3d3d3d]"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <label htmlFor="cvv" className="font-semibold text-[#3d3d3d]">
-                  CVV
-                </label>
-                <input
-                  type="number"
-                  name="cvv"
-                  id="cvv"
-                  placeholder="123"
-                  value={formData.cvv}
-                  onChange={handleChange}
-                  className="p-4 border rounded-md border-[#3d3d3d]"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-2">
-              <label
-                htmlFor="discountCode"
-                className="font-semibold text-[#3d3d3d]"
-              >
-                DISCOUNT CODE
-              </label>
-              <input
-                type="text"
-                name="discountCode"
-                id="discountCode"
-                value={formData.discountCode}
-                onChange={handleChange}
-                placeholder="Enter discount code"
-                className="p-4 border rounded-sm border-[#3d3d3d]"
-              />
-            </div>
-          </div>
-        </div>
-
+      <div className="flex justify-self-center gap-4 ">
         <div className="grid gap-4 pb-12">
           <div className="p-6 bg-[#fcf8ef] rounded-2xl shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]">
             <p className="text-center pb-8 pt-4 font-semibold">
@@ -295,16 +163,6 @@ function AssessmentWeb() {
                 they are. our platform{" "}
               </p>
             </div>
-            <div>
-              <div className="pb-4 flex gap-4">
-                <img src="/diamond.svg" alt="diamond-icon" />
-                <p>Payment invoice</p>
-              </div>
-              <p>
-                Access2Edu is changing the way students learn, no matter where
-                they are. our platform{" "}
-              </p>
-            </div>
           </div>
           <div className="text-center bg-[#fcf8ef] rounded-2xl p-6 pb-2 shadow-[0px_1px_6px_0px_rgba(0,_0,_0,_0.1)]">
             <p className="pb-2">{dayOfWeek}</p>
@@ -312,25 +170,23 @@ function AssessmentWeb() {
               {month} {day}, {year} | {formattedTime}
             </p>
           </div>
-          <button
-            type="submit"
-            onClick={() => setIsModalOpen(true)}
-            className="bg-[#785491] text-white w-full hover:bg-[#f3eff8] hover:text-[#3d3d3d]  font-semibold rounded-xl"
-            disabled={loading}
-          >
-            {loading ? "Processing..." : "Make Payment"}
-          </button>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="text-red-500 bg-red-100 text-center p-4 rounded-md mb-4">
+              {errorMessage}
+            </div>
+          )}
+
+          <PayButton />
 
           <ConfirmedExamPayment
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             handleContinue={handleNext}
           />
-
-          {success && <p className="text-green-600 mt-2">{success}</p>}
-          {error && <p className="text-red-600 mt-2">{error}</p>}
         </div>
-      </form>
+      </div>
     </div>,
 
     //Slide Three
@@ -411,7 +267,7 @@ function AssessmentWeb() {
               <button
                 onClick={handleNext}
                 className="bg-[#785491] text-white px-6 py-2 rounded-md font-semibold hover:bg-[#e7def0] hover:text-[#3d3d3d]"
-                disabled={step === 2 && !isPaymentSuccessful} //Check if payment is successful
+                disabled={step === 2}
               >
                 Continue
               </button>

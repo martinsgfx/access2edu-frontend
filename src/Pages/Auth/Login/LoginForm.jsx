@@ -1,7 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { loginStudent } from "../../../services/studentServices"; // Import loginStudent
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -14,8 +14,6 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [keepMeSignedIn, setKeepMeSignedIn] = useState(false);
 
-  
-
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -23,40 +21,45 @@ function LoginForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
 
     if (!formData.email || !formData.password) {
-      setError(() => {
-        return (
-          <p className="text-red-400">
-            {!formData.email ? "Email is required" : "Password is required"}
-          </p>
-        );
-      });
+      setError("Email and password are required.");
+      setIsSubmitting(false);
       return;
     }
 
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert(`Logged in as ${formData.email}`);
-    }, 1500);
+    try {
+      // Use loginStudent from studentServices
+      const response = await loginStudent(formData);
 
-    setError(newErrors);
+      // Handle success response
+      if (response.status === 200) {
+        const { token } = response.data; 
 
-    if (Object.keys(newErrors).length === 0) {
-      // Simulate storing token
-      const token = "fake-auth-token";
-      if (keepMeSignedIn) {
-        localStorage.setItem("authToken", token);
-      } else {
-        sessionStorage.setItem("authToken", token);
+        // Store the token
+        if (keepMeSignedIn) {
+          localStorage.setItem("authToken", token);
+        } else {
+          sessionStorage.setItem("authToken", token);
+        }
+
+        // Redirect or show success message
+        alert("Login successful!");
+        console.log("Logged in as:", formData.email);
       }
-      console.log("Form submitted! Auth token saved.");
+    } catch (err) {
+      // Handle error response
+      setError(
+        err.response?.data?.message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-  };  
+  };
 
   return (
     <div className="pb-10">
@@ -67,7 +70,7 @@ function LoginForm() {
             Email
           </label>
           <input
-            className="email  p-4"
+            className="email p-4"
             type="email"
             id="email"
             name="email"
@@ -78,12 +81,10 @@ function LoginForm() {
         </div>
 
         {/* Password */}
-
         <div className="grid gap-2">
           <label htmlFor="password" className="text-bold">
             Password
           </label>
-
           <div className="passwordWrapper">
             <input
               className="password pwordSpace p-4"
@@ -103,7 +104,7 @@ function LoginForm() {
           </div>
         </div>
 
-        {error && <p>{error}</p>}
+        {error && <p className="text-red-400">{error}</p>}
 
         {/* Forgot Password */}
         <div className="text-right pt-2">
@@ -116,7 +117,6 @@ function LoginForm() {
         </div>
 
         {/* Checkbox */}
-
         <div className="flex items-center gap-2 pt-10">
           <input
             type="checkbox"
