@@ -23,8 +23,6 @@ import Settings from './Pages/Dashboard/Settings';
 
 
 
-
-
 // Import global styles
 import './styles/global.css'
 
