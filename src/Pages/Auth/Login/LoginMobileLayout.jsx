@@ -1,7 +1,7 @@
 import React from "react";
 import "./Login.css";
 import SocialMediaSignIn from "./SocialMediaSignIn";
-import LoginForm from "./Loginform";
+import LoginForm from "./LoginForm";
 
 function LoginMobileLayout() {
   return (
