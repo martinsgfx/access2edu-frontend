@@ -64,7 +64,7 @@ const SuccessStories = () => {
       </section>
 
       {/* Students Section */}
-      <div className="students-section">
+      <div className="students-section grid ">
         <div className="students-content">
           <h3>Students</h3>
           <p>

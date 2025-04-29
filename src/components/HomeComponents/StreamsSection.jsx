@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/global.css";
 import profileImg from "../../assets/Ellipse 4.png"; // ✅ Replace with your own profile image
+import scienceImage from "../../assets/science.png";
 
 const StreamsSection = () => {
   const [openSubjectIndex, setOpenSubjectIndex] = useState(null);
@@ -24,27 +25,27 @@ const StreamsSection = () => {
   const streams = [
     {
       title: "Science",
-      image: "/assets/science.png",
+      image: scienceImage,
       description:
         "Unlock the power of science - Experiment, innovate, and change the world.",
       head: "Mr. John Chinedu",
     },
     {
       title: "Art",
-      image: "/assets/science.png",
+      image: scienceImage,
       description:
         "Unlock the power of creativity - Express, design, and innovate.",
       head: "Mr. John Chinedu",
     },
     {
       title: "Commercial",
-      image: "/assets/science.png",
+      image: scienceImage,
       description: "Master the world of business - Strategize, plan, and grow.",
       head: "Mr. John Chinedu",
     },
     {
       title: "Vocational study",
-      image: "/assets/science.png",
+      image: scienceImage,
       description:
         "Unlock the power of skill - Learn, practice, and build for life.",
       head: "Mr. John Chinedu",
@@ -53,7 +54,7 @@ const StreamsSection = () => {
 
   return (
     <section className="streams-section">
-      <div className="streams-header">
+      <div className="streams-header text-center">
         <h2>
           Explore our Academic Streams For <span className="highlight">Senior</span> Students
         </h2>
