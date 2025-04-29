@@ -5,7 +5,7 @@ import LoginForm from "./Loginform";
 
 function LoginMobileLayout() {
   return (
-    <div>
+    <div className="bg-[#fffbeb]">
       <div className="headbar shadow-[1px_0px_12px_rgba(0,0,0,0.17)]">
         <img
           src="src\assets\access_II_edu-removebg-preview 2.svg"

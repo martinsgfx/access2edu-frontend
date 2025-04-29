@@ -496,22 +496,250 @@ color: white;
 
 
 /* Success Stories */
+.success-stories-container {
+  font-family: 'Poppins', sans-serif;
+  padding: 40px 20px;
+  background-color: #fefaf4;
+  color: #1f1f1f;
+}
+
+/* ========== CERTIFICATION BANNER ========== */
+.certification-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  margin-bottom: 60px;
+}
+
+.banner-image img {
+  width: 350px;
+  border-radius: 12px;
+}
+
+.banner-content h3 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.banner-content p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  max-width: 450px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #6c4b3f;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #55392f;
+}
+
+
+/* ========== SUCCESS STORIES SECTION ========== */
 .success-stories {
-  padding: 50px;
-  background: white;
+  background-color: #fff9f0;
+  padding: 80px 20px;
   text-align: center;
 }
 
-.testimonial {
-  background: #f8f9fa;
-  padding: 20px;
-  margin: 20px auto;
-  width: 50%;
-  border-radius: 5px;
+.section-title h2 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin-bottom: 10px;
 }
 
-.testimonial h3 {
-  margin-top: 10px;
+.section-title p {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.testimonial-grid {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.testimonial-card {
+  background-color: #fff3ce;
+  width: 400px;
+  padding: 25px 30px;
+  border-radius: 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.student-top,
+.student-bottom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-top {
+  margin-bottom: 20px;
+}
+
+.student-bottom {
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.student-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+}
+
+.student-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.quote-icon {
+  width: 30px;
+  margin: 0 auto 20px auto;
+  display: block;
+}
+
+.testimonial-text {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.7;
+  text-align: center;
+}
+
+
+/* ========== STUDENTS SECTION ========== */
+.students-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 550px;
+  margin-bottom: 60px;
+  margin-left: 60px;
+}
+
+.students-image img {
+  width: 400px;
+  border-radius: 16px;
+}
+
+.students-content h3 {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.students-content p {
+  font-size: 22px;
+  margin-bottom: 20px;
+  max-width: 400px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 15px;
+
+}
+
+.btn-primary {
+  background-color: #6a3e81;
+  border-radius: 8px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  color: #6c4b3f;
+}
+
+.btn-outline:hover {
+  background-color: #6a3e81;
+  color: #fff;
+}
+
+/* ========== TEACHERS SECTION ========== */
+.teachers-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 16px;
+}
+
+.teachers-image img {
+  width: 400px;
+  border-radius: 12px;
+}
+
+.teachers-content h3 {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.teachers-content p {
+  font-size: 22px;
+  margin-bottom: 20px;
+  max-width: 400px;
+}
+
+.btn-secondary {
+  background-color: #6a3e81;
+  color: white;
+  border-radius: 8px;
+}
+
+.btn-secondary:hover {
+  background-color: #55392f;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .certification-banner,
+  .students-section,
+  .teachers-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .banner-image img,
+  .students-image img,
+  .teachers-image img {
+    width: 100%;
+  }
+
+  .btn-group {
+    justify-content: center;
+  }
 }
 
 
