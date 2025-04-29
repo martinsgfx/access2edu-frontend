@@ -4,8 +4,11 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { loginStudent } from "../../../services/studentServices"; // Import loginStudent
 import "./Login.css";
 import SocialMediaWebSignIn from "./SocialMediaWebSignIn";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function WebLoginForm() {
+
+  const navigate = useNavigate(); // Initialize useNavigate
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -63,6 +66,8 @@ function WebLoginForm() {
     } finally {
       setIsSubmitting(false);
     }
+
+    navigate("/dashboard"); 
   };
 
   return (

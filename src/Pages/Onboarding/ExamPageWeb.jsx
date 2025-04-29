@@ -3,30 +3,12 @@ import HeaderWeb from "../../components/HeaderWeb";
 import ExamHeader from "./ExamHeader";
 import ExamQuestions from "./ExamQuestions";
 import { useNavigate } from "react-router-dom";
+import questions from "./Questions";
 
-const questions = [
-  {
-    id: 1,
-    text: "This assessment will evaluate both your technical and soft skills to create a comprehensive profile.",
-    options: ["Technical skill", "Technical skill", "Technical skill"],
-    correctAnswer: 0,
-  },
-  {
-    id: 2,
-    text: "This assessment will evaluate both your technical and soft skills to create a comprehensive profile.",
-    options: ["Technical skill", "Technical skill", "Technical skill"],
-    correctAnswer: 1,
-  },
-  {
-    id: 3,
-    text: "This assessment will evaluate both your technical and soft skills to create a comprehensive profile.",
-    options: ["Technical skill", "Technical skill", "Technical skill"],
-    correctAnswer: 2,
-  },
-];
+
 
 function ExamPageWeb() {
-  const [timeLeft, setTimeLeft] = useState(40 * 60); // 40 mins
+  const [timeLeft, setTimeLeft] = useState(45 * 60); // 45 mins
   const [answers, setAnswers] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -76,7 +58,7 @@ function ExamPageWeb() {
           // Questions
           <div>
             <ExamHeader
-              duration="40 minutes"
+              duration="45 minutes"
               currentTime={formatTime(timeLeft)}
             />
             <ExamQuestions
@@ -208,8 +190,8 @@ function ExamPageWeb() {
                   return (
                     <div key={i} className="mb-4">
                       <div className="flex justify-between text-sm mb-1">
-                        <span>Eng</span>
-                        <span>{correct ? "Passed" : "Failed"} 1</span>
+                        <span>{q.id}</span>
+                        <span>{correct ? "Passed" : "Failed"}</span>
                       </div>
                       <div className="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
                         <div

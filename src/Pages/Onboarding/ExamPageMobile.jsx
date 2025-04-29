@@ -3,28 +3,7 @@ import HeaderWeb from "../../components/HeaderWeb";
 import ExamHeaderMobile from "./ExamHeaderMobile";
 import ExamQuestionsMobile from "./ExamQuestionsMobile"
 import { useNavigate } from "react-router-dom";
-
-const questions = [
-  {
-    id: 1,
-    text: "This assessment will evaluate both your technical and soft skills to create a comprehensive profile.",
-    options: ["Technical skill", "Technical skill", "Technical skill"],
-    correctAnswer: 0,
-  },
-  {
-    id: 2,
-    text: "This assessment will evaluate both your technical and soft skills to create a comprehensive profile.",
-    options: ["Technical skill", "Technical skill", "Technical skill"],
-    correctAnswer: 1,
-  },
-  {
-    id: 3,
-    text: "This assessment will evaluate both your technical and soft skills to create a comprehensive profile.",
-    options: ["Technical skill", "Technical skill", "Technical skill"],
-    correctAnswer: 2,
-  },
-];
-
+import questions from "./Questions";
 
 
 function ExamPageMobile() {
@@ -210,8 +189,8 @@ function ExamPageMobile() {
                   return (
                     <div key={i} className="mb-4">
                       <div className="flex justify-between text-sm mb-1">
-                        <span>Eng</span>
-                        <span>{correct ? "Passed" : "Failed"} 1</span>
+                        <span>{q.id}</span>
+                        <span>{correct ? "Passed" : "Failed"} </span>
                       </div>
                       <div className="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
                         <div

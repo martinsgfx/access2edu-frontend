@@ -8,11 +8,11 @@ function ExamHeader({ duration, currentTime }) {
         This assessment will evaluate both your technical and soft skills to <br />
         create a comprehensive profile.
       </p>
-      <div className="mt-6 text-left ml-12">
-        <p className="text-lg pb-4">
+      <div className="m-6 ml-12 flex justify-between">
+        <p className="text-2xl">
           <strong>Duration:</strong> {duration}
         </p>
-        <p className="text-lg">
+        <p className="text-2xl text-red-600">
           <strong>Time:</strong> {currentTime}
         </p>
       </div>

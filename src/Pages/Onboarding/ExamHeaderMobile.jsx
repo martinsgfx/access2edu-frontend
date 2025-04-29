@@ -9,10 +9,10 @@ function ExamHeaderMobile({ duration, currentTime }) {
         create a comprehensive profile.
       </p>
       <div className="mt-4 text-left ">
-        <p className="text-[16px] pb-4">
+        <p className="text-[16px] font-bold pb-4">
           <strong>Duration:</strong> {duration}
         </p>
-        <p className="text-[16px]">
+        <p className="text-[16px] font-bold text-red-500">
           <strong>Time:</strong> {currentTime}
         </p>
       </div>

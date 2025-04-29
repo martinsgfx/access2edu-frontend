@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { loginStudent } from "../../../services/studentServices"; // Import loginStudent
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -59,6 +61,9 @@ function LoginForm() {
     } finally {
       setIsSubmitting(false);
     }
+
+    navigate("/dashboard"); // Redirect to dashboard after successful login
+
   };
 
   return (
