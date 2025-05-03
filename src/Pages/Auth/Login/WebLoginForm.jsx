@@ -57,6 +57,12 @@ function WebLoginForm() {
         // Redirect or show success message
         alert("Login successful!");
         console.log("Logged in as:", formData.email);
+        // Redirect or show success message
+        alert("Login successful!");
+        console.log("Logged in as:", formData.email);
+
+        // Navigate to dashboard
+        navigate("/dashboard");
       }
     } catch (err) {
       // Handle error response
@@ -66,8 +72,6 @@ function WebLoginForm() {
     } finally {
       setIsSubmitting(false);
     }
-
-    navigate("/dashboard"); 
   };
 
   return (

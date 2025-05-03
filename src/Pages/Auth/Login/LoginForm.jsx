@@ -52,6 +52,8 @@ function LoginForm() {
         // Redirect or show success message
         alert("Login successful!");
         console.log("Logged in as:", formData.email);
+        // Redirect to dashboard after successful login
+        navigate("/dashboard");
       }
     } catch (err) {
       // Handle error response
@@ -61,8 +63,6 @@ function LoginForm() {
     } finally {
       setIsSubmitting(false);
     }
-
-    navigate("/dashboard"); // Redirect to dashboard after successful login
 
   };
 
